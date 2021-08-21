@@ -1,6 +1,6 @@
 {
   "name": "employee-bonus-api",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "An AWS Lambda-based web API that receives employee bonus data.",
   "author": "Tramaine L. Gillus",
   "repository": {
