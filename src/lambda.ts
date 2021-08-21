@@ -16,7 +16,14 @@ export const handler: APIGatewayProxyHandler = async (
   });
   const command = new PublishCommand({
     TopicArn: process.env.SAVE_EMPLOYEE_BONUS_SNS_TOPIC,
-    Message: 'Foobar!!',
+    Message: JSON.stringify({
+      bonuses: [
+        {
+          employee: '111111111',
+          bonus: 500.0,
+        },
+      ],
+    }),
   });
   const response = await client.send(command);
 
