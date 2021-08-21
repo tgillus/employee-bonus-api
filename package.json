@@ -5,7 +5,7 @@
   "author": "Tramaine L. Gillus",
   "repository": {
     "type": "git",
-    "url": "git@github.com:tgillus/employee-bonux-api.git"
+    "url": "git@github.com:tgillus/employee-bonus-api.git"
   },
   "license": "ISC",
   "main": "build/server.js",
