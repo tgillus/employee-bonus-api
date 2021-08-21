@@ -1,6 +1,6 @@
 {
   "name": "employee-bonus-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An AWS Lambda-based web API that receives employee bonus data.",
   "author": "Tramaine L. Gillus",
   "repository": {
@@ -11,7 +11,7 @@
   "main": "build/server.js",
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "build:artifact": "npx gulp",
+    "build:artifact": "npx gulp build",
     "build:artifact:clean": "npx gulp clean",
     "clean": "rimraf ./build",
     "format": "prettier . --write",
@@ -26,6 +26,7 @@
     "watch": "tsc -c"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.83",
     "@types/express": "^4.17.13",
     "@types/jest": "^26.0.24",
     "@types/morgan": "^1.9.3",
