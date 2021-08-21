@@ -11,3 +11,5 @@ npm-debug.log*
 *.swp
 yarn-debug.log*
 yarn-error.log*
+
+!log*.ts
