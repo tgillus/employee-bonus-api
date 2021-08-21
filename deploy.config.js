@@ -1,6 +1,6 @@
 const stages = {
   development: {
-    defaultBranch: 'main',
+    defaultBranch: 'develop',
   },
 };
 
