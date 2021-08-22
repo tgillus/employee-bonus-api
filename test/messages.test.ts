@@ -1,12 +1,10 @@
 import supertest from 'supertest';
 import { MessagesService } from '../src/services/messages';
 import { app } from '../src/express/app';
-import { logger } from '../src/util/logger';
+import { log } from '../src/util/log';
 
-beforeAll(async () => {
-  logger.transports.forEach((transport) => {
-    transport.silent = true;
-  });
+beforeAll(() => {
+  log.options.silent = true;
 });
 
 describe('GET /messages', () => {

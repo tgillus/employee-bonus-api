@@ -4,22 +4,12 @@ import {
   APIGatewayProxyResult,
 } from 'aws-lambda';
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
-import log from 'lambda-log';
-
-// import { logger } from './util/logger';
+import { log } from './util/log';
 
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  // logger.info(JSON.stringify(event));
   log.info('event', event);
-
-  // logger.info('Hello logger.', {});
-  log.info('Hello Lambda!');
-  // logger.error('foo', new Error('foobar'));
-  log.error(new Error('foo'));
-  // let foo: string;
-  // foo!.toString();
 
   const client = new SNSClient({
     region: 'us-east-1',
@@ -37,7 +27,6 @@ export const handler: APIGatewayProxyHandler = async (
   });
   const response = await client.send(command);
 
-  // logger.info(JSON.stringify(response));
   log.info('response', response);
 
   return {

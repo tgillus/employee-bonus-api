@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { MessagesService } from '../services/messages';
-import { logger } from '../util/logger';
+import { log } from '../util/log';
 
 export async function all(request: Request, response: Response): Promise<void> {
   const messagesService = new MessagesService();
@@ -10,7 +10,7 @@ export async function all(request: Request, response: Response): Promise<void> {
 
     response.status(200).json(messages);
   } catch (error) {
-    logger.error(error.message);
+    log.error(error);
 
     response.status(500).json({ error: 'Failed to retrieve messages' });
   }

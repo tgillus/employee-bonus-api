@@ -1,10 +1,9 @@
 import './util/env';
-import 'reflect-metadata';
 import { app } from './express/app';
-import { logger } from './util/logger';
+import { log } from './util/log';
 
 const port = process.env.PORT;
 
 app.listen(port, () => {
-  logger.info(`listening on port ${port}.`);
+  log.info(`listening on port ${port}.`);
 });
