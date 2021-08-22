@@ -1,38 +1,24 @@
 import {
   APIGatewayProxyEvent,
-  APIGatewayProxyHandler,
   APIGatewayProxyResult,
+  APIGatewayProxyStructuredResultV2,
+  Context,
 } from 'aws-lambda';
-import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 import { log } from './util/log';
+import { app } from './express/app';
+import serverless from 'serverless-http';
 
-export const handler: APIGatewayProxyHandler = async (
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> => {
+const serverlessHandler = serverless(app, {
+  basePath: '/compensation',
+});
+
+export const handler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult | APIGatewayProxyStructuredResultV2> => {
   log.info('event', event);
-
-  const client = new SNSClient({
-    region: 'us-east-1',
-  });
-  const command = new PublishCommand({
-    TopicArn: process.env.SAVE_EMPLOYEE_BONUS_SNS_TOPIC,
-    Message: JSON.stringify({
-      bonuses: [
-        {
-          employee: '111111111',
-          bonus: 500.0,
-        },
-      ],
-    }),
-  });
-  const response = await client.send(command);
-
-  log.info('response', response);
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Bonus pay received.',
-    }),
-  };
+  log.info('context', context);
+  const result = await serverlessHandler(event, context);
+  log.info('result', result);
+  return result;
 };

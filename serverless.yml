@@ -1,0 +1,17 @@
+service: employee-bonus-api
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: v1
+  region: us-east-1
+
+functions:
+  app:
+    handler: build/lambda.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
