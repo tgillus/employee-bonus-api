@@ -1,5 +1,7 @@
 service: employee-bonus-api
 
+useDotenv: true
+
 plugins:
   - serverless-offline
 
