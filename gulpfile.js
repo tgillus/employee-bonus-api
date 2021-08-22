@@ -69,7 +69,7 @@ async function uploadDeploymentArtifactToS3() {
   const command = new PutObjectCommand({
     Bucket: deploy.deploymentArtifactBucket(),
     Key: `${deploy.deploymentArtifactFolder()}/${artifactName()}`,
-    Body: fs.createReadStream(path.join(__dirname, 'deploy', artifactName())),
+    Body: fs.createReadStream(path.join(artifactBuildPath(), artifactName())),
   });
 
   await client.send(command);
@@ -87,8 +87,8 @@ gulp.task(
     build,
     cleanDependencies,
     installProductionDependencies,
-    buildDeploymentArtifact,
-    uploadDeploymentArtifactToS3
+    buildDeploymentArtifact
   )
 );
 gulp.task('default', gulp.task('build'));
+gulp.task('upload', uploadDeploymentArtifactToS3);
