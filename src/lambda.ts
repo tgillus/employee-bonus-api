@@ -11,6 +11,11 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   logger.info(JSON.stringify(event));
 
+  logger.info('Hello logger.');
+  logger.error('foo', new Error('foobar'));
+  let foo: string;
+  foo!.toString();
+
   const client = new SNSClient({
     region: 'us-east-1',
   });

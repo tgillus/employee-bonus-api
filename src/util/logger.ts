@@ -18,14 +18,7 @@ const levels = {
 
 const consoleFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-  winston.format.colorize({ all: true }),
-  winston.format.printf((info) => {
-    let msg = `${info.timestamp} ${info.level}: ${info.message}`;
-    if (info.stack) {
-      msg += `\n${info.stack}`;
-    }
-    return msg;
-  })
+  winston.format.colorize({ all: true })
 );
 
 const transports = [
@@ -35,7 +28,8 @@ const transports = [
 ];
 
 export const logger = winston.createLogger({
-  level: process.env.LOGGING_LEVEL,
+  level: process.env.LOG_LEVEL,
+  format: winston.format.json(),
   levels,
   transports,
 });
