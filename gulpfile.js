@@ -17,7 +17,11 @@ function artifactBuildPath() {
 }
 
 function artifactName() {
-  return `${package.name}-${package.version}.zip`;
+  const clonedPackagePath = path.join(tmpBuildPath(), 'package.json');
+  const { name, version } = JSON.parse(
+    fs.readFileSync(clonedPackagePath).toString()
+  );
+  return `${name}-${version}.zip`;
 }
 
 async function rmTmpBuildPath() {
@@ -58,18 +62,21 @@ async function installProductionDependencies() {
 }
 
 async function buildDeploymentArtifact() {
-  gulp
+  await gulp
     .src(['build/**', 'node_modules/**'], { base: '.' })
     .pipe(zip(artifactName()))
     .pipe(gulp.dest(artifactBuildPath()));
 }
 
 async function uploadDeploymentArtifactToS3() {
+  const buildArtifactName = artifactName();
   const client = new S3Client({ region: 'us-east-1' });
   const command = new PutObjectCommand({
     Bucket: deploy.deploymentArtifactBucket(),
-    Key: `${deploy.deploymentArtifactFolder()}/${artifactName()}`,
-    Body: fs.createReadStream(path.join(artifactBuildPath(), artifactName())),
+    Key: `${deploy.deploymentArtifactFolder()}/${buildArtifactName}`,
+    Body: fs.createReadStream(
+      path.join(artifactBuildPath(), buildArtifactName)
+    ),
   });
 
   await client.send(command);
@@ -90,5 +97,5 @@ gulp.task(
     buildDeploymentArtifact
   )
 );
-gulp.task('default', gulp.task('build'));
 gulp.task('upload', uploadDeploymentArtifactToS3);
+gulp.task('default', gulp.task('build'));
