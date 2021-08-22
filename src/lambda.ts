@@ -4,9 +4,9 @@ import {
   APIGatewayProxyStructuredResultV2,
   Context,
 } from 'aws-lambda';
+import serverless from 'serverless-http';
 import { log } from './util/log';
 import { app } from './express/app';
-import serverless from 'serverless-http';
 
 const serverlessHandler = serverless(app, {
   basePath: '/compensation',
