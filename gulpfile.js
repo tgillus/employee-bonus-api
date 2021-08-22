@@ -64,7 +64,7 @@ async function buildDeploymentArtifact() {
     .pipe(gulp.dest(artifactBuildPath()));
 }
 
-async function uploadToS3() {
+async function uploadDeploymentArtifactToS3() {
   const client = new S3Client({ region: 'us-east-1' });
   const command = new PutObjectCommand({
     Bucket: deploy.deploymentArtifactBucket(),
@@ -88,7 +88,7 @@ gulp.task(
     cleanDependencies,
     installProductionDependencies,
     buildDeploymentArtifact,
-    uploadToS3
+    uploadDeploymentArtifactToS3
   )
 );
 gulp.task('default', gulp.task('build'));
