@@ -3,6 +3,8 @@ const gulp = require('gulp');
 const zip = require('gulp-zip');
 const execa = require('execa');
 const path = require('path');
+const fs = require('fs');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const package = require('./package.json');
 const deploy = require('./deploy.config');
 
@@ -12,6 +14,10 @@ function tmpBuildPath() {
 
 function artifactBuildPath() {
   return path.join(__dirname, 'deploy');
+}
+
+function artifactName() {
+  return `${package.name}-${package.version}.zip`;
 }
 
 async function rmTmpBuildPath() {
@@ -52,11 +58,21 @@ async function installProductionDependencies() {
 }
 
 async function buildDeploymentArtifact() {
-  const artifactName = `${package.name}-${package.version}.zip`;
   gulp
     .src(['build/**', 'node_modules/**'], { base: '.' })
-    .pipe(zip(artifactName))
+    .pipe(zip(artifactName()))
     .pipe(gulp.dest(artifactBuildPath()));
+}
+
+async function uploadToS3() {
+  const client = new S3Client({ region: 'us-east-1' });
+  const command = new PutObjectCommand({
+    Bucket: deploy.deploymentArtifactBucket(),
+    Key: `${deploy.deploymentArtifactFolder()}/${artifactName()}`,
+    Body: fs.createReadStream(path.join(__dirname, 'deploy', artifactName())),
+  });
+
+  await client.send(command);
 }
 
 gulp.task('clean', gulp.parallel(rmTmpBuildPath, rmArtifactBuildPath));
@@ -71,7 +87,8 @@ gulp.task(
     build,
     cleanDependencies,
     installProductionDependencies,
-    buildDeploymentArtifact
+    buildDeploymentArtifact,
+    uploadToS3
   )
 );
 gulp.task('default', gulp.task('build'));
